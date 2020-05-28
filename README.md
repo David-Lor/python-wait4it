@@ -16,7 +16,7 @@ wait_for(host="google.com", port=80)
 try:
     wait_for(host="google.com", port=12345, timeout=5)
 except TimeoutError:
-    # Actually will raise custom WaitForTimeoutError exception, but inherits from TimeoutError
+    # Actually will raise custom WaitForTimeoutError exception, but inherits from TimeoutError (except on Python2)
     print("Failed! (as expected)")
 
 # This should return False in 15 seconds

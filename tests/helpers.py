@@ -14,7 +14,7 @@ import pytest
 # # Project # #
 from wait4it import get_free_port
 
-__all__ = ("free_port", "port_in_use", "random_timeout", "expect_time")
+__all__ = ("free_port", "port_in_use", "lazy_port_in_use", "random_timeout", "expect_time")
 
 
 @pytest.fixture
@@ -31,6 +31,15 @@ def port_in_use(free_port):
     with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as sck:
         sck.bind(("localhost", free_port))
         sck.listen(1)
+        yield free_port
+
+
+@pytest.fixture
+def lazy_port_in_use(free_port):
+    """Returns a free port on this host that is now in use by a fake service started by this fixture
+    """
+    with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as sck:
+        sck.bind(("localhost", free_port))
         yield free_port
 
 

@@ -43,6 +43,15 @@ def test_wait_for_port_not_in_use_not_raise(free_port, random_timeout):
         assert r is False
 
 
+def test_wait_for_lazy_port_in_use_not_raise(lazy_port_in_use, random_timeout):
+    """Wait for a port that is currently in used, but not listening; without raising exception.
+    Should return False after the given timeout
+    """
+    with expect_time(random_timeout + 0.5):
+        r = wait_for(lazy_port_in_use, timeout=random_timeout, raise_error=False)
+        assert r is False
+
+
 # TODO Pending tests:
 #  - parametrize polling_freq
 #  - set timeout to 0

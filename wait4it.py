@@ -7,11 +7,19 @@ from contextlib import closing
 
 __all__ = ("wait_for", "WaitForTimeoutError", "get_free_port")
 
+try:
+    _TimeoutError = TimeoutError
+except NameError:
+    _TimeoutError = OSError
 
-class WaitForTimeoutError(TimeoutError):
+
+class WaitForTimeoutError(_TimeoutError):
     # TODO docstring for class
     def __init__(self, host, port):
-        super().__init__("Timeout reached while waiting for {host}:{port} to be reachable".format(host=host, port=port))
+        super(_TimeoutError, self).__init__("Timeout reached while waiting for {host}:{port} to be reachable".format(
+            host=host,
+            port=port
+        ))
         self.host = host
         self.port = port
 
@@ -35,6 +43,10 @@ def wait_for(port, host="127.0.0.1", polling_freq=0.25, timeout=15, raise_error=
     """
     # TODO Add retries_limit param
     have_timeout = bool(timeout)
+    try:
+        socket_exceptions = (ConnectionError, socket.timeout, socket.error)
+    except NameError:
+        socket_exceptions = (OSError, socket.error)
 
     with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as sck:
         if have_timeout:
@@ -46,7 +58,7 @@ def wait_for(port, host="127.0.0.1", polling_freq=0.25, timeout=15, raise_error=
                 sck.connect((host, port))
                 return True
 
-            except (ConnectionError, socket.timeout):
+            except socket_exceptions:
                 if have_timeout and time() - start_time >= timeout:
                     if raise_error:
                         raise WaitForTimeoutError(host=host, port=port)
