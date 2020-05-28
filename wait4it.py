@@ -11,7 +11,7 @@ __all__ = ("wait_for", "WaitForTimeoutError", "get_free_port")
 class WaitForTimeoutError(TimeoutError):
     # TODO docstring for class
     def __init__(self, host, port):
-        super().__init__(f"Timeout reached while waiting for {host}:{port} to be reachable")
+        super().__init__("Timeout reached while waiting for {host}:{port} to be reachable".format(host=host, port=port))
         self.host = host
         self.port = port
 
