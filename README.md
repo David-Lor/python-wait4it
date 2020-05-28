@@ -36,7 +36,7 @@ except WaitForTimeoutError as ex:
 
 ## Dependencies & Compatibility
 
-Not external dependencies are required. Compatible (tested with) Python 2.7, 3.4, 3.5, 3.6, 3.7, 3.8 - under Linux.
+Not external dependencies are required. Compatible (tested with) Python 2.7, 3.5, 3.6, 3.7, 3.8 - under Linux.
 
 ## TODO
 
