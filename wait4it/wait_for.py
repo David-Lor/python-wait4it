@@ -1,27 +1,14 @@
-"""wait4it
+"""WAIT FOR
+Sync wait_for
 """
 
 import socket
 from time import time, sleep
 from contextlib import closing
 
-__all__ = ("wait_for", "WaitForTimeoutError", "get_free_port")
+from .exceptions import WaitForTimeoutError
 
-try:
-    _TimeoutError = TimeoutError
-except NameError:
-    _TimeoutError = OSError
-
-
-class WaitForTimeoutError(_TimeoutError):
-    # TODO docstring for class
-    def __init__(self, host, port):
-        super(_TimeoutError, self).__init__("Timeout reached while waiting for {host}:{port} to be reachable".format(
-            host=host,
-            port=port
-        ))
-        self.host = host
-        self.port = port
+__all__ = ("wait_for",)
 
 
 def wait_for(port, host="127.0.0.1", polling_freq=0.25, timeout=15, raise_error=True):
@@ -66,15 +53,3 @@ def wait_for(port, host="127.0.0.1", polling_freq=0.25, timeout=15, raise_error=
                         return False
                 else:
                     sleep(polling_freq)
-
-
-def get_free_port():
-    """Get a random free port on localhost. Notice that the port is not reserved, and could be used by any other
-    application until your target service binds to it.
-    :returns: free port available
-    :rtype: int
-    """
-    with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as sck:
-        sck.bind(("", 0))
-        sck.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        return sck.getsockname()[1]

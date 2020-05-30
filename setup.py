@@ -5,7 +5,7 @@ with open("README.md", "r") as f:
 
 setup(
     name="wait4it",
-    py_modules=["wait4it"],
+    packages=["wait4it"],
     version="0.0.1",
     license="ISC",
     description="Wait until a certain TCP port is available",
