@@ -1,8 +1,16 @@
 # python-wait4it
 
+![Test](https://github.com/David-Lor/python-wait4it/workflows/Test/badge.svg)
+[![PyPi](https://img.shields.io/badge/PyPi-wait4it-blue)](https://pypi.org/project/wait4it/)
+[![License](https://img.shields.io/github/license/David-Lor/python-wait4it)](https://github.com/David-Lor/python-wait4it/blob/master/LICENSE.md)
+
 Wait-For-It Python module, that waits until a certain TCP port is available.
 
 Based on the idea behind the well-known [wait-for-it](https://github.com/vishnubob/wait-for-it) script, but created mainly as a Python package to be used on other Python applications, services or modules, instead of being mainly a CLI tool.
+
+## Installing
+
+Package is available at [PyPi](https://pypi.org/project/wait4it), so you can install it with `pip install wait4it` - or from sources with `python setup.py install`.
 
 ## Usage
 
@@ -36,7 +44,7 @@ except WaitForTimeoutError as ex:
 
 ## Dependencies & Compatibility
 
-Not external dependencies are required. Compatible (tested with) Python 2.7, 3.5, 3.6, 3.7, 3.8 - under Linux.
+Not external dependencies are required. Compatible (tested with) Python 2.7, 3.4, 3.5, 3.6, 3.7, 3.8 - under Linux.
 
 ## Changelog
 
@@ -45,5 +53,3 @@ Not external dependencies are required. Compatible (tested with) Python 2.7, 3.5
 ## TODO
 
 - Parameter to set retries limit
-- Python package
-- Upload to PyPi
