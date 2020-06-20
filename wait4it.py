@@ -3,9 +3,9 @@
 
 import socket
 from time import time, sleep
-from contextlib import closing
+from contextlib import closing, contextmanager
 
-__all__ = ("wait_for", "WaitForTimeoutError", "get_free_port")
+__all__ = ("wait_for", "wait_for_pass", "WaitForTimeoutError", "get_free_port")
 
 try:
     _TimeoutError = TimeoutError
@@ -22,6 +22,40 @@ class WaitForTimeoutError(_TimeoutError):
         ))
         self.host = host
         self.port = port
+
+
+def wait_for_pass(exceptions=None, retries=3):
+    """Decorator that catches exceptions raised by the decorated function, and retries running it
+    if the exception is one of the provided, until retries limit is reached.
+    :param exceptions: single or list of exceptions expected. If not set, catch all
+    :type exceptions: list | tuple | Exception
+    :param retries: retries limit. If 0, retry forever
+    :type retries: int
+    """
+    # TODO Add timeout
+    try:
+        len(exceptions)
+    except TypeError:
+        if exceptions:
+            exceptions = [exceptions]
+
+    def _real_decorator(func):
+        def wrapper(*args, **kwargs):
+            last_ex = None
+
+            for _ in range(retries):
+                try:
+                    return func(*args, **kwargs)
+                except Exception as ex:
+                    if exceptions and type(ex) not in exceptions:
+                        raise ex
+                    last_ex = ex
+
+            raise last_ex
+
+        return wrapper
+
+    return _real_decorator
 
 
 def wait_for(port, host="127.0.0.1", polling_freq=0.25, timeout=15, raise_error=True):
@@ -42,7 +76,7 @@ def wait_for(port, host="127.0.0.1", polling_freq=0.25, timeout=15, raise_error=
     :raises: WaitForTimeoutError | ValueError
     """
     # TODO Add retries_limit param
-    have_timeout = bool(timeout)
+    have_timeout = timeout and timeout > 0
     try:
         socket_exceptions = (ConnectionError, socket.timeout, socket.error)
     except NameError:
