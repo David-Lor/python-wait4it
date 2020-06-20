@@ -6,11 +6,14 @@
 
 Wait-For-It Python module, that waits until a certain TCP port is available.
 
-Based on the idea behind the well-known [wait-for-it](https://github.com/vishnubob/wait-for-it) script, but created mainly as a Python package to be used on other Python applications, services or modules, instead of being mainly a CLI tool.
+Based on the idea behind the well-known [wait-for-it](https://github.com/vishnubob/wait-for-it) script, 
+but created mainly as a Python package to be used on other Python applications, services or modules, 
+instead of being mainly a CLI tool.
 
 ## Installing
 
-Package is available at [PyPi](https://pypi.org/project/wait4it), so you can install it with `pip install wait4it` - or from sources with `python setup.py install`.
+Package is available at [PyPi](https://pypi.org/project/wait4it), so you can install it with `pip install wait4it` - 
+or from sources with `python setup.py install`.
 
 ## Usage
 
@@ -42,12 +45,36 @@ except WaitForTimeoutError as ex:
     assert ex.port == 12345
 ```
 
+### wait_for_pass decorator
+
+It works similarly to wait_for, but if the considered exceptions are raised on the decorated function, it will re-run
+until it runs without raising these errors, or until the given retries limit is reached.
+
+The following example will randomly raise ZeroDivisionError in the function `divide_by_random`, which runs 10 times.
+If fails more than twice, the exception will be thrown outside the function.
+
+```python
+from random import randint
+from wait4it import wait_for_pass
+
+@wait_for_pass(ZeroDivisionError, retries=2)
+def divide_by_random(n=10):
+    d = randint(0, 1)
+    print("Gonna divide", n, "/", d)
+    return n / d
+
+for _ in range(10):
+    r = divide_by_random()
+    print("Got result:", r)
+```
+
 ## Dependencies & Compatibility
 
 Not external dependencies are required. Compatible (tested with) Python 2.7, 3.4, 3.5, 3.6, 3.7, 3.8 - under Linux.
 
 ## Changelog
 
+- 0.1.1 - Add wait_for_pass decorator
 - 0.0.1 - Initial release
 
 ## TODO
