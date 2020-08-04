@@ -74,10 +74,12 @@ Not external dependencies are required. Compatible (tested with) Python 2.7, 3.4
 
 ## Changelog
 
+- 0.2.1 - Add retries_delay parameter to wait_for_pass
 - 0.1.2 - Fix wait_for_pass decorator not looping indefinitely when retries=0
 - 0.1.1 - Add wait_for_pass decorator
 - 0.0.1 - Initial release
 
 ## TODO
 
-- Parameter to set retries limit
+- Set retries limit on wait_for
+- Set timeout on wait_for_pass

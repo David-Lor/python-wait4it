@@ -51,12 +51,15 @@ def random_timeout():
 
 
 @contextmanager
-def expect_time(timeout):
-    """Context manager that expects to run the inner code in less than the given time
-    :param timeout: time limit
-    :type timeout: float
+def expect_time(expected, more=False):
+    """Context manager that expects to run the inner code in less or more than the given time
+    :param expected: expected limit/minimum time to run code in
+    :type expected: float
+    :param more: if True, verify that runs in more time than the expected.
+                 If False, verify that it runs in less time than the expected
+    :type more: bool
     """
     start_time = time()
     yield
     elapsed_time = time() - start_time
-    assert elapsed_time < timeout
+    assert elapsed_time < expected if not more else elapsed_time >= expected
