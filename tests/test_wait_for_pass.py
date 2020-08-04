@@ -86,7 +86,7 @@ def test_wait_for_pass_not_defined_exception():
 
 
 def test_wait_for_pass_none_exception_defined():
-    """Wait for a function that raises and exception, when any exception is defined on the decorator.
+    """Wait for a function that raises an exception, when any exception is defined on the decorator.
     Should run thrice and raise the exception
     """
     run_data = {
@@ -102,3 +102,23 @@ def test_wait_for_pass_none_exception_defined():
         func()
 
     assert run_data["times_ran"] == 3
+
+
+def test_wait_for_pass_indefinitely():
+    """Wait for a function that raises an exception until it runs 15 times, when setting wait_for_pass retries=0.
+    Should run 15 times and raise no exceptions
+    """
+    run_times = 15
+    run_data = {
+        "times_ran": 0
+    }
+
+    @wait_for_pass(retries=0)
+    def func():
+        run_data["times_ran"] += 1
+        if run_data["times_ran"] < run_times:
+            raise ZeroDivisionError
+
+    func()
+
+    assert run_data["times_ran"] == run_times

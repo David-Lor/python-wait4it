@@ -3,7 +3,7 @@
 
 import socket
 from time import time, sleep
-from contextlib import closing, contextmanager
+from contextlib import closing
 
 __all__ = ("wait_for", "wait_for_pass", "WaitForTimeoutError", "get_free_port")
 
@@ -42,8 +42,9 @@ def wait_for_pass(exceptions=None, retries=3):
     def _real_decorator(func):
         def wrapper(*args, **kwargs):
             last_ex = None
+            iterator = range(retries) if retries else iter(int, 1)
 
-            for _ in range(retries):
+            for _ in iterator:
                 try:
                     return func(*args, **kwargs)
                 except Exception as ex:
