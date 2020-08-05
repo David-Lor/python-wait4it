@@ -74,6 +74,7 @@ Not external dependencies are required. Compatible (tested with) Python 2.7, 3.4
 
 ## Changelog
 
+- 0.1.2 - Fix wait_for_pass decorator not looping indefinitely when retries=0
 - 0.1.1 - Add wait_for_pass decorator
 - 0.0.1 - Initial release
 
