@@ -68,16 +68,22 @@ for _ in range(10):
     print("Got result:", r)
 ```
 
+If `retries` is set to 0, the function will run forever until it passes without raising exceptions.
+
+wait_for_pass also allows a parameter `retries_delay`, which can be used to define a delay, in seconds, between failed function executions.
+
 ## Dependencies & Compatibility
 
 Not external dependencies are required. Compatible (tested with) Python 2.7, 3.4, 3.5, 3.6, 3.7, 3.8 - under Linux.
 
 ## Changelog
 
+- 0.2.1 - Add retries_delay parameter to wait_for_pass
 - 0.1.2 - Fix wait_for_pass decorator not looping indefinitely when retries=0
 - 0.1.1 - Add wait_for_pass decorator
 - 0.0.1 - Initial release
 
 ## TODO
 
-- Parameter to set retries limit
+- Set retries limit on wait_for
+- Set timeout on wait_for_pass

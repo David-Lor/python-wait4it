@@ -8,6 +8,9 @@ import pytest
 # # Project # #
 from wait4it import wait_for_pass
 
+# # Package # #
+from .helpers import expect_time
+
 
 def test_wait_for_pass_successful(random_timeout):
     """Wait for a function that raises no exceptions.
@@ -105,7 +108,7 @@ def test_wait_for_pass_none_exception_defined():
 
 
 def test_wait_for_pass_indefinitely():
-    """Wait for a function that raises an exception until it runs 15 times, when setting wait_for_pass retries=0.
+    """Wait for a function that raises an exception when it runs 15 times, while setting wait_for_pass retries=0.
     Should run 15 times and raise no exceptions
     """
     run_times = 15
@@ -122,3 +125,16 @@ def test_wait_for_pass_indefinitely():
     func()
 
     assert run_data["times_ran"] == run_times
+
+
+def test_wait_for_pass_delay():
+    """Wait for a function that raises an exception, setting wait_for_pass retries=5 and retries_delay_1.
+    Should end in at least 5 seconds
+    """
+    @wait_for_pass(retries=5, retries_delay=1)
+    def func():
+        raise ZeroDivisionError
+
+    with expect_time(expected=5, more=True):
+        with pytest.raises(ZeroDivisionError):
+            func()

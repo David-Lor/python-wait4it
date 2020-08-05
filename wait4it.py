@@ -24,12 +24,13 @@ class WaitForTimeoutError(_TimeoutError):
         self.port = port
 
 
-def wait_for_pass(exceptions=None, retries=3):
+def wait_for_pass(exceptions=None, retries=3, retries_delay=0):
     """Decorator that catches exceptions raised by the decorated function, and retries running it
     if the exception is one of the provided, until retries limit is reached.
     :param exceptions: single or list of exceptions expected. If not set, catch all
     :type exceptions: list | tuple | Exception
     :param retries: retries limit. If 0, retry forever
+    :param retries_delay: delay between retries
     :type retries: int
     """
     # TODO Add timeout
@@ -47,10 +48,15 @@ def wait_for_pass(exceptions=None, retries=3):
             for _ in iterator:
                 try:
                     return func(*args, **kwargs)
+
                 except Exception as ex:
                     if exceptions and type(ex) not in exceptions:
                         raise ex
+
                     last_ex = ex
+
+                    if retries_delay:
+                        sleep(retries_delay)
 
             raise last_ex
 
